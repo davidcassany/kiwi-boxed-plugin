@@ -158,8 +158,8 @@ class BoxDownload:
     def _extract_kernel_from_tarball(self, tarfile: str) -> str:
         Command.run(
             [
-                'tar', '-C', self.box_dir,
-                '--transform', f's/.*/kernel.{self.arch}/',
+                'gtar' if platform.system() == 'Darwin' else 'tar',
+                '-C', self.box_dir, '--transform', f's/.*/kernel.{self.arch}/',
                 '--wildcards', '-xf', tarfile, '*.kernel'
             ]
         )
@@ -168,8 +168,8 @@ class BoxDownload:
     def _extract_initrd_from_tarball(self, tarfile: str) -> str:
         Command.run(
             [
-                'tar', '-C', self.box_dir,
-                '--transform', f's/.*/initrd.{self.arch}/',
+                'gtar' if platform.system() == 'Darwin' else 'tar',
+                '-C', self.box_dir, '--transform', f's/.*/initrd.{self.arch}/',
                 '--wildcards', '-xf', tarfile, '*.initrd.xz'
             ]
         )

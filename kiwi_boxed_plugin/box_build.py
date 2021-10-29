@@ -149,8 +149,11 @@ class BoxBuild:
         if self.machine:
             vm_machine.append(self.machine)
         if self.arch == 'x86_64':
-            # KVM is only present for Intel and AMD
-            vm_machine.append('accel=kvm')
+            # Acceleration is only present for on Intel and AMD
+            if platform.system() == 'Darwin':
+              vm_machine.append('accel=hvf')
+            elif platform.system() == 'Linux':
+              vm_machine.append('accel=kvm')
         vm_machine.append('-cpu')
         vm_machine.append(self.cpu)
         qemu_binary = self._find_qemu_call_binary()
